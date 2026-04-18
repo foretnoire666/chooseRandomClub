@@ -2,7 +2,7 @@
 
 ## 使い方
 
-1. [ダウンロード](https://github.com/foretnoire666/chooseRandomClub/releases/download/latest/chooseRandomClub.zip)
+1. [ダウンロード](https://github.com/foretnoire666/chooseRandomClub/releases/latest/download/chooseRandomClub.zip)
 2. zipを解答
 3. `chooseRandomClub.exe`をダブルクリックで実行
 - 初回起動時
