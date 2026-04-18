@@ -54,8 +54,8 @@ public class Main {
         if (!Files.exists(currentClub)) {
             Files.createFile(currentClub);
         }
-        var shouldInitilizeFiles = List.of(allClubs, drawnClubs);
-        for (var f : shouldInitilizeFiles) {
+        var shouldInitializeFiles = List.of(allClubs, drawnClubs);
+        for (var f : shouldInitializeFiles) {
             if (Files.exists(f)) {
                 continue;
             }
