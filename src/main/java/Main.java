@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private Path currentDir;
     private Path allClubs;
     private Path currentClub;
     private Path drawnClubs;
@@ -52,7 +51,6 @@ public class Main {
         currentClub = currentDir.resolve("currentClub.txt");
         drawnClubs = currentDir.resolve("drawnClubs.tsv");
 
-        var files = List.of(currentClub, drawnClubs);
         if (!Files.exists(currentClub)) {
             Files.createFile(currentClub);
         }
@@ -63,8 +61,9 @@ public class Main {
             }
             try (
                     var is = getClass().getResourceAsStream("/" + f.getFileName());
-                    var os = Files.newOutputStream(f, StandardOpenOption.CREATE);
+                    var os = Files.newOutputStream(f, StandardOpenOption.CREATE)
             ) {
+                //noinspection DataFlowIssue
                 is.transferTo(os);
             }
         }
@@ -100,6 +99,7 @@ public class Main {
             var student = s.nextLine();
             if (student.isEmpty()) {
                 System.out.println("生徒名を入力して下さい");
+                continue;
             }
             return student;
         }
