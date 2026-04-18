@@ -22,5 +22,6 @@ test {
 jar {
     manifest {
         attributes('Main-Class': 'Main')
+        archiveFileName = 'chooseRandomClub.jar'
     }
 }

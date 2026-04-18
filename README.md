@@ -4,7 +4,7 @@
 
 1. Java 25以降がインストールされている状態でjarを実行
     ```shell
-    java -jar \chooseRandomClub-1.0.jar
+    java -jar \chooseRandomClub.jar
     ```
 - 初回起動時
    1. お題となる部活名が表示されます
