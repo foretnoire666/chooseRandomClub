@@ -16,7 +16,6 @@ public class Main {
     private static final String CONFIRM_MESSAGE_FORMAT = "「%s」は描き終わりましたか？ y/n\n";
 
     void main() throws Exception {
-        System.out.print(ALL_CLUBS.getFileName().toString());
         initialize();
         final var currentClub = readCurrent();
         if (currentClub.isEmpty()) {
