@@ -1,16 +1,19 @@
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final Path ALL_CLUBS = Path.of("./allClubs.txt");
-    private static final Path CURRENT_CLUB = Path.of("./currentClub.txt");
-    private static final Path DRAWN_CLUBS = Path.of("./drawnClubs.tsv");
+    private Path currentDir;
+    private Path allClubs;
+    private Path currentClub;
+    private Path drawnClubs;
 
     private static final String OUTPUT_FORMAT = "「%s」を描いて下さい\n";
     private static final String CONFIRM_MESSAGE_FORMAT = "「%s」は描き終わりましたか？ y/n\n";
@@ -40,12 +43,20 @@ public class Main {
         System.out.printf(OUTPUT_FORMAT, nextClub);
     }
 
-    private void initialize() throws IOException {
-        var files = List.of(CURRENT_CLUB, DRAWN_CLUBS);
-        if (!Files.exists(CURRENT_CLUB)) {
-            Files.createFile(CURRENT_CLUB);
+    private void initialize() throws IOException, URISyntaxException {
+
+        final var currentDir = Paths
+                .get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                .getParent();
+        allClubs = currentDir.resolve("allClubs.txt");
+        currentClub = currentDir.resolve("currentClub.txt");
+        drawnClubs = currentDir.resolve("drawnClubs.tsv");
+
+        var files = List.of(currentClub, drawnClubs);
+        if (!Files.exists(currentClub)) {
+            Files.createFile(currentClub);
         }
-        var shouldInitilizeFiles = List.of(ALL_CLUBS, DRAWN_CLUBS);
+        var shouldInitilizeFiles = List.of(allClubs, drawnClubs);
         for (var f : shouldInitilizeFiles) {
             if (Files.exists(f)) {
                 continue;
@@ -60,7 +71,7 @@ public class Main {
     }
 
     private String readCurrent() throws IOException {
-        return Files.readString(CURRENT_CLUB, StandardCharsets.UTF_8);
+        return Files.readString(currentClub, StandardCharsets.UTF_8);
     }
 
     private boolean hasDrawnCurrentClub(final String currentClub) {
@@ -94,12 +105,12 @@ public class Main {
         }
     }
     private void removeCurrent() throws IOException {
-        Files.writeString(CURRENT_CLUB, "", StandardCharsets.UTF_8 ,StandardOpenOption.TRUNCATE_EXISTING);
+        Files.writeString(currentClub, "", StandardCharsets.UTF_8 ,StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     private void writeDrew(final String club, final String student) throws IOException {
         try {
-            Files.writeString(DRAWN_CLUBS, club + "\t" + student + "\n", StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            Files.writeString(drawnClubs, club + "\t" + student + "\n", StandardCharsets.UTF_8, StandardOpenOption.APPEND);
         } catch (IOException e) {
             System.out.println("描き終えた部活一覧への書き込みに失敗しました。ロールバックします。部活: 「" + club + "」、生徒: 「" + student + "」");
             writeCurrent(club);
@@ -108,17 +119,17 @@ public class Main {
     }
 
     private void writeCurrent(final String club) throws IOException {
-        Files.writeString(CURRENT_CLUB, club, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.writeString(currentClub, club, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
 
     }
     private String choose() throws IOException {
-        final var clubs = Files.readAllLines(ALL_CLUBS, StandardCharsets.UTF_8);
+        final var clubs = Files.readAllLines(allClubs, StandardCharsets.UTF_8);
         if (clubs.isEmpty()) {
             return "";
         }
         final var chosen = clubs.remove(new SecureRandom().nextInt(clubs.size()));
         writeCurrent(chosen);
-        Files.write(ALL_CLUBS, clubs, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(allClubs, clubs, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
         return chosen;
     }
 }
