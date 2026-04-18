@@ -40,6 +40,13 @@ public class Main {
             return;
         }
         System.out.printf(OUTPUT_FORMAT, nextClub);
+        System.out.println("終了するにはyを押してください");
+        final var s = new Scanner(System.in);
+        while (true) {
+            if ("y".equalsIgnoreCase(s.nextLine())) {
+                return;
+            }
+        }
     }
 
     private void initialize() throws IOException, URISyntaxException {
