@@ -20,7 +20,7 @@ jobs:
       - run: |
           chmod 744 ./gradlew
           ./gradlew jar
-          mkdir ./build/jpackage/tmp-build
+          mkdir -p ./build/jpackage/tmp-build
           pushd ./build/jpackage
           jlink --no-header-files --no-man-pages --compress=zip-2 --strip-debug --add-modules java.base --output requiredJre --output ./requiredJre
           cp ../libs/chooseRandomClub.jar ./tmp-build/
