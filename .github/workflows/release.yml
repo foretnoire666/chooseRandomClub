@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: windows-latest
     permissions:
       contents: write
     steps:
@@ -17,15 +17,15 @@ jobs:
           distribution: "corretto"
           java-version: "25"
 
-      - run: |
-          chmod 744 ./gradlew
-          ./gradlew jar
-          mkdir -p ./build/jpackage/tmp-build
+      - shell: powershell
+        run: |
+          ./gradlew.bat jar
+          mkdir ./build/jpackage/tmp-build
           pushd ./build/jpackage
           jlink --no-header-files --no-man-pages --compress=zip-2 --strip-debug --add-modules java.base --output requiredJre --output ./requiredJre
           cp ../libs/chooseRandomClub.jar ./tmp-build/
           jpackage --type app-image --input  ./tmp-build --win-console --runtime-image ./requiredJre --name "chooseRandomClub" --main-jar chooseRandomClub.jar
-          zip -r ./chooseRandomClub.zip ./chooseRandomClub
+          Compress-Archive -Path ./chooseRandomClub -DestinationPath ./chooseRandomClub.zip
       - uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
